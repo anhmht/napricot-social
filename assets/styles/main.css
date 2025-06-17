@@ -1,0 +1,149 @@
+@import './variables.css';
+@import './font.css';
+
+html {
+  font-size: 10px;
+}
+
+body {
+  color: var(--color-text);
+  font-family: 'SVN-Circular', sans-serif;
+  font-style: normal;
+  font-weight: 450;
+  font-size: 1.6rem;
+  margin: 0;
+  --el-font-family: 'SVN-Circular', sans-serif;
+  --el-font-size-base: 1.6rem;
+  --el-text-color-regular: var(--color-text);
+  --el-color-primary: var(--color-primary);
+  --el-color-primary-light-3: var(--color-primary-light) !important;
+  --el-color-primary-dark-2: var(--color-primary-light) !important;
+  --el-color-primary-light-9: #ec582508;
+  --el-color-primary-light-7: #ec582536;
+  --el-color-primary-light-5: #ff7b4f;
+  --el-mask-color: rgb(255 255 255 / 50%);
+  --el-color-success: var(--color-success);
+  --el-color-danger: var(--color-error);
+}
+
+h1 {
+  font-size: 4.8rem;
+  margin: 0;
+}
+
+h2 {
+  font-size: 4rem;
+  margin: 0;
+}
+
+h3 {
+  font-size: 3.6rem;
+  margin: 0;
+}
+
+h4 {
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+h5 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+h6 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+p strong {
+  font-weight: 700;
+}
+
+.container {
+  max-width: 1410px;
+  margin: 0 auto;
+}
+
+.el-form-item__error {
+  font-weight: 400;
+}
+
+.el-notification {
+  padding: 16px;
+  border-radius: 4px !important;
+}
+
+.el-notification__content {
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-top: 0 !important;
+}
+
+.el-tooltip__trigger:focus-visible {
+  outline: none;
+}
+
+.ck-content {
+  a {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.8;
+    }
+  }
+  h2 {
+    font-size: 3rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-size: 2.6rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  h4 {
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  p {
+    margin-bottom: 24px;
+  }
+  blockquote {
+    p {
+      margin: 0;
+    }
+  }
+  ul {
+    li {
+      font-weight: 400;
+    }
+    li + li {
+      margin-top: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.6rem;
+    }
+    h2 {
+      font-size: 2.8rem;
+    }
+    h3 {
+      font-size: 2rem;
+    }
+    h4 {
+      font-size: 1.8rem;
+    }
+  }
+}
