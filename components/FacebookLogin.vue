@@ -64,6 +64,8 @@ const {
 
 onMounted(() => {
   initializeFacebookSDK()
+  console.log('facebookAppId', facebookAppId)
+  console.log('facebookConfigId', facebookConfigId)
 })
 
 const initializeFacebookSDK = () => {

@@ -28,6 +28,12 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+      OPERATION_URL: ${{ secrets.OPERATION_URL }}
+      FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+      FACEBOOK_CONFIG_ID: ${{ secrets.FACEBOOK_CONFIG_ID }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,11 +78,6 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Static HTML export with Nuxt
         run: ${{ steps.detect-package-manager.outputs.manager }} run generate
-        env:
-          OPERATION_URL: ${{ secrets.OPERATION_URL }}
-          FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
-          FACEBOOK_CONFIG_ID: ${{ secrets.FACEBOOK_CONFIG_ID }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
