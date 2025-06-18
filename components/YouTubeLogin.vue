@@ -55,7 +55,7 @@ const accessToken = ref<string | null>(null)
 const tokenClient = ref<any>(null)
 
 const {
-  app: { googleClientId }
+  public: { googleClientId }
 } = useRuntimeConfig()
 
 onMounted(() => {

@@ -1,10 +1,6 @@
 // Import the defineNuxtConfig function
 import { defineNuxtConfig } from 'nuxt/config'
-
-// Debug logging
-console.log('🚀 Loading Nuxt config...')
-console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'NOT_SET')
-console.log('FACEBOOK_CONFIG_ID:', process.env.FACEBOOK_CONFIG_ID || 'NOT_SET')
+import { getRunTimeConfig } from './config/RuntimeConfig'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -33,10 +29,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      facebookAppId: process.env.FACEBOOK_APP_ID || '',
-      facebookConfigId: process.env.FACEBOOK_CONFIG_ID || '',
-      operationUrl: process.env.OPERATION_URL || 'https://api.napricot.com',
-      googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+      ...getRunTimeConfig()
     }
   },
 
