@@ -6,20 +6,29 @@ export interface RuntimeConfig {
 }
 
 export const getRunTimeConfig = () => {
-  // Use process.stdout.write to ensure visibility in GitHub Actions
-  process.stdout.write('\n🔍 RuntimeConfig Debug - Environment Variables:\n')
-  process.stdout.write(
-    `OPERATION_URL: ${process.env.OPERATION_URL || 'undefined'}\n`
-  )
-  process.stdout.write(
-    `FACEBOOK_APP_ID: ${process.env.FACEBOOK_APP_ID || 'undefined'}\n`
-  )
-  process.stdout.write(
-    `FACEBOOK_CONFIG_ID: ${process.env.FACEBOOK_CONFIG_ID || 'undefined'}\n`
-  )
-  process.stdout.write(
-    `GOOGLE_CLIENT_ID: ${process.env.GOOGLE_CLIENT_ID || 'undefined'}\n`
-  )
+  // File-based debugging to prove this function is called
+  try {
+    const fs = require('fs')
+    const debugInfo = {
+      timestamp: new Date().toISOString(),
+      env: {
+        OPERATION_URL: process.env.OPERATION_URL || 'undefined',
+        FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID || 'undefined',
+        FACEBOOK_CONFIG_ID: process.env.FACEBOOK_CONFIG_ID || 'undefined',
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || 'undefined'
+      }
+    }
+    fs.writeFileSync(
+      'debug-runtime-config.txt',
+      JSON.stringify(debugInfo, null, 2)
+    )
+    console.log('🔍 RuntimeConfig debug file written')
+  } catch (e) {
+    console.log(
+      'Could not write RuntimeConfig debug file:',
+      e instanceof Error ? e.message : String(e)
+    )
+  }
 
   const config = {
     operationUrl: process.env.OPERATION_URL || 'https://api.napricot.com',
@@ -27,10 +36,6 @@ export const getRunTimeConfig = () => {
     facebookConfigId: process.env.FACEBOOK_CONFIG_ID || '',
     googleClientId: process.env.GOOGLE_CLIENT_ID || ''
   }
-
-  process.stdout.write(
-    `🧪 Final Runtime Config: ${JSON.stringify(config, null, 2)}\n`
-  )
 
   return config
 }

@@ -2,26 +2,31 @@ import fontsPreload from './config/Font'
 import { getRunTimeConfig } from './config/RuntimeConfig'
 
 // Debug: Check environment variables at config time
-process.stdout.write(
-  '\n🚀 nuxt.config.ts - Environment variables at config time:\n'
-)
-process.stdout.write(
-  `FACEBOOK_APP_ID: ${process.env.FACEBOOK_APP_ID || 'NOT_SET'}\n`
-)
-process.stdout.write(
-  `FACEBOOK_CONFIG_ID: ${process.env.FACEBOOK_CONFIG_ID || 'NOT_SET'}\n`
-)
-process.stdout.write(
-  `OPERATION_URL: ${process.env.OPERATION_URL || 'NOT_SET'}\n`
-)
-process.stdout.write(
-  `GOOGLE_CLIENT_ID: ${process.env.GOOGLE_CLIENT_ID || 'NOT_SET'}\n`
-)
+try {
+  const fs = require('fs')
+  const debugInfo = {
+    timestamp: new Date().toISOString(),
+    env: {
+      FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID || 'NOT_SET',
+      FACEBOOK_CONFIG_ID: process.env.FACEBOOK_CONFIG_ID || 'NOT_SET',
+      OPERATION_URL: process.env.OPERATION_URL || 'NOT_SET',
+      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || 'NOT_SET'
+    }
+  }
+  fs.writeFileSync('debug-nuxt-config.txt', JSON.stringify(debugInfo, null, 2))
+  console.log('🔍 Debug file written: debug-nuxt-config.txt')
+} catch (e) {
+  console.log(
+    'Could not write debug file:',
+    e instanceof Error ? e.message : String(e)
+  )
+}
 
 // Call getRunTimeConfig and log result
 const runtimeConfig = getRunTimeConfig()
-process.stdout.write(
-  `🧪 Runtime config result: ${JSON.stringify(runtimeConfig, null, 2)}\n`
+console.log(
+  '🧪 Runtime config created with values:',
+  Object.keys(runtimeConfig)
 )
 
 // https://nuxt.com/docs/api/configuration/nuxt-config

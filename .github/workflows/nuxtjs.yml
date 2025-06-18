@@ -83,8 +83,18 @@ jobs:
           echo "FACEBOOK_CONFIG_ID: $FACEBOOK_CONFIG_ID"
           echo "OPERATION_URL: $OPERATION_URL"
           echo "GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID"
+          echo "Writing debug file..."
+          echo "FACEBOOK_APP_ID=$FACEBOOK_APP_ID" > debug-env.txt
+          echo "FACEBOOK_CONFIG_ID=$FACEBOOK_CONFIG_ID" >> debug-env.txt
+          echo "OPERATION_URL=$OPERATION_URL" >> debug-env.txt
+          echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> debug-env.txt
+          cat debug-env.txt
       - name: Static HTML export with Nuxt
         run: ${{ steps.detect-package-manager.outputs.manager }} run generate
+      - name: Check if debug files were created
+        run: |
+          echo "Checking for debug files created during build..."
+          find . -name "debug-*.txt" -exec echo "Found: {}" \; -exec cat {} \;
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
