@@ -1,7 +1,5 @@
 import fontsPreload from './config/Font'
-import { type RuntimeConfig, getRunTimeConfig } from './config/RuntimeConfig'
-
-const runtimeConfig: RuntimeConfig = getRunTimeConfig()
+import { getRunTimeConfig } from './config/RuntimeConfig'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -29,7 +27,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     app: {
-      ...runtimeConfig
+      ...getRunTimeConfig()
     }
   },
 
