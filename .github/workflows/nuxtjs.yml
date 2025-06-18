@@ -29,6 +29,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: Environment
+    env:
+      FACEBOOK_APP_ID: ${{ vars.FACEBOOK_APP_ID }}
+      FACEBOOK_CONFIG_ID: ${{ vars.FACEBOOK_CONFIG_ID }}
+      OPERATION_URL: ${{ vars.OPERATION_URL }}
+      GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,11 +78,6 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Static HTML export with Nuxt
         run: ${{ steps.detect-package-manager.outputs.manager }} run generate
-        env:
-          OPERATION_URL: ${{ env.OPERATION_URL }}
-          FACEBOOK_APP_ID: ${{ env.FACEBOOK_APP_ID }}
-          FACEBOOK_CONFIG_ID: ${{ env.FACEBOOK_CONFIG_ID }}
-          GOOGLE_CLIENT_ID: ${{ env.GOOGLE_CLIENT_ID }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
