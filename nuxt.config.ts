@@ -1,3 +1,6 @@
+// Import the defineNuxtConfig function
+import { defineNuxtConfig } from 'nuxt/config'
+
 // Debug logging
 console.log('🚀 Loading Nuxt config...')
 console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'NOT_SET')
