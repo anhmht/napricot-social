@@ -29,6 +29,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: Environment
+    env:
+      OPERATION_URL: ${{ secrets.OPERATION_URL }}
+      FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+      FACEBOOK_CONFIG_ID: ${{ secrets.FACEBOOK_CONFIG_ID }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -71,30 +76,15 @@ jobs:
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Create environment file
+      - name: Verify environment variables
         run: |
-          echo "Creating .env file..."
-          echo "OPERATION_URL=${{ secrets.OPERATION_URL }}" > .env
-          echo "FACEBOOK_APP_ID=${{ secrets.FACEBOOK_APP_ID }}" >> .env
-          echo "FACEBOOK_CONFIG_ID=${{ secrets.FACEBOOK_CONFIG_ID }}" >> .env
-          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
-          echo "Environment file created:"
-          cat .env
-      - name: Verify environment loading
-        run: |
-          echo "Testing environment variable loading..."
-          node -e "
-            require('dotenv').config();
-            console.log('OPERATION_URL from dotenv:', process.env.OPERATION_URL ? 'SET' : 'NOT SET');
-            console.log('FACEBOOK_APP_ID from dotenv:', process.env.FACEBOOK_APP_ID ? 'SET' : 'NOT SET');
-          "
+          echo "Checking environment variables are available..."
+          echo "OPERATION_URL: $(if [ -n "$OPERATION_URL" ]; then echo 'SET'; else echo 'NOT SET'; fi)"
+          echo "FACEBOOK_APP_ID: $(if [ -n "$FACEBOOK_APP_ID" ]; then echo 'SET'; else echo 'NOT SET'; fi)"
+          echo "FACEBOOK_CONFIG_ID: $(if [ -n "$FACEBOOK_CONFIG_ID" ]; then echo 'SET'; else echo 'NOT SET'; fi)"
+          echo "GOOGLE_CLIENT_ID: $(if [ -n "$GOOGLE_CLIENT_ID" ]; then echo 'SET'; else echo 'NOT SET'; fi)"
       - name: Static HTML export with Nuxt
         run: ${{ steps.detect-package-manager.outputs.manager }} run generate
-        env:
-          OPERATION_URL: ${{ secrets.OPERATION_URL }}
-          FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
-          FACEBOOK_CONFIG_ID: ${{ secrets.FACEBOOK_CONFIG_ID }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
