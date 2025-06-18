@@ -53,12 +53,14 @@ const isLoading = ref(false)
 const user = ref<GoogleUser | null>(null)
 const accessToken = ref<string | null>(null)
 const tokenClient = ref<any>(null)
-
-const {
-  public: { googleClientId }
-} = useRuntimeConfig()
+const clientId = ref<string>('')
 
 onMounted(() => {
+  const {
+    public: { googleClientId }
+  } = useRuntimeConfig()
+  clientId.value = googleClientId as string
+
   initializeGoogleSDK()
 })
 
@@ -67,7 +69,7 @@ const initializeGoogleSDK = () => {
     if (typeof window !== 'undefined' && window.google) {
       // Initialize OAuth2 token client using new Google Identity Services
       tokenClient.value = window.google.accounts.oauth2.initTokenClient({
-        client_id: googleClientId,
+        client_id: clientId.value,
         scope:
           'profile email https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload',
         callback: handleTokenResponse

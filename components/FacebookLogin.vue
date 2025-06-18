@@ -58,15 +58,17 @@ const isFbLoaded = ref(false)
 const isLoading = ref(false)
 const user = ref<FacebookUser | null>(null)
 
-const {
-  app: { facebookAppId, facebookConfigId }
-} = useRuntimeConfig()
+const appId = ref<string>('')
+const configId = ref<string>('')
 
 onMounted(() => {
+  const {
+    public: { facebookAppId, facebookConfigId }
+  } = useRuntimeConfig()
+  appId.value = facebookAppId as string
+  configId.value = facebookConfigId as string
+
   initializeFacebookSDK()
-  console.log(useRuntimeConfig())
-  console.log('facebookAppId', facebookAppId)
-  console.log('facebookConfigId', facebookConfigId)
 })
 
 const initializeFacebookSDK = () => {
@@ -74,7 +76,7 @@ const initializeFacebookSDK = () => {
   const checkFB = () => {
     if (typeof window !== 'undefined' && window.FB) {
       window.FB.init({
-        appId: facebookAppId,
+        appId: appId.value,
         cookie: true,
         xfbml: true,
         version: 'v23.0'
@@ -112,7 +114,7 @@ const loginWithFacebook = () => {
     },
     {
       scope: 'email,public_profile',
-      config_id: facebookConfigId
+      config_id: configId.value
     }
   )
 }
