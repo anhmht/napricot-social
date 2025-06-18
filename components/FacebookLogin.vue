@@ -62,8 +62,6 @@ const {
   app: { facebookAppId, facebookConfigId }
 } = useRuntimeConfig()
 
-console.log(useRuntimeConfig())
-
 onMounted(() => {
   initializeFacebookSDK()
   console.log(useRuntimeConfig())
