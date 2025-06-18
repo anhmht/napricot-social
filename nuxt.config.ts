@@ -1,33 +1,15 @@
 import fontsPreload from './config/Font'
-import { getRunTimeConfig } from './config/RuntimeConfig'
 
-// Debug: Check environment variables at config time
-try {
-  const fs = require('fs')
-  const debugInfo = {
-    timestamp: new Date().toISOString(),
-    env: {
-      FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID || 'NOT_SET',
-      FACEBOOK_CONFIG_ID: process.env.FACEBOOK_CONFIG_ID || 'NOT_SET',
-      OPERATION_URL: process.env.OPERATION_URL || 'NOT_SET',
-      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || 'NOT_SET'
-    }
-  }
-  fs.writeFileSync('debug-nuxt-config.txt', JSON.stringify(debugInfo, null, 2))
-  console.log('🔍 Debug file written: debug-nuxt-config.txt')
-} catch (e) {
-  console.log(
-    'Could not write debug file:',
-    e instanceof Error ? e.message : String(e)
-  )
-}
-
-// Call getRunTimeConfig and log result
-const runtimeConfig = getRunTimeConfig()
+// Simple debug at top level
+console.log('🚀 NUXT CONFIG LOADING...')
+console.log('Environment variables:')
+console.log('- FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'NOT_SET')
 console.log(
-  '🧪 Runtime config created with values:',
-  Object.keys(runtimeConfig)
+  '- FACEBOOK_CONFIG_ID:',
+  process.env.FACEBOOK_CONFIG_ID || 'NOT_SET'
 )
+console.log('- OPERATION_URL:', process.env.OPERATION_URL || 'NOT_SET')
+console.log('- GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID || 'NOT_SET')
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -47,7 +29,7 @@ export default defineNuxtConfig({
    */
   devServer: {
     host: 'dev.napricot.com',
-    port: Number(process.env.NUXT_PORT),
+    port: Number(process.env.NUXT_PORT) || 3000,
     https: {
       key: '.ssl/localhost.key',
       cert: '.ssl/localhost.crt'
@@ -56,7 +38,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      ...runtimeConfig
+      facebookAppId: process.env.FACEBOOK_APP_ID || '',
+      facebookConfigId: process.env.FACEBOOK_CONFIG_ID || '',
+      operationUrl: process.env.OPERATION_URL || 'https://api.napricot.com',
+      googleClientId: process.env.GOOGLE_CLIENT_ID || ''
     }
   },
 
@@ -82,16 +67,12 @@ export default defineNuxtConfig({
         }
       ]
     },
-    // Ensure fonts are copied to the output directory
     buildAssetsDir: '/_nuxt/'
   },
 
   components: true,
 
-  css: [
-    // CSS file in the project
-    '~/assets/styles/main.css'
-  ],
+  css: ['~/assets/styles/main.css'],
 
   postcss: {
     plugins: {

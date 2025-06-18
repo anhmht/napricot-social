@@ -76,6 +76,10 @@ jobs:
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Validate Nuxt config
+        run: |
+          echo "Checking nuxt.config.ts syntax..."
+          node -c nuxt.config.ts && echo "✅ Config syntax is valid" || echo "❌ Config syntax error"
       - name: Debug environment variables before build
         run: |
           echo "🔍 Environment variables available to Nuxt:"
