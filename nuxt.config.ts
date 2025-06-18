@@ -1,6 +1,17 @@
 import fontsPreload from './config/Font'
 import { getRunTimeConfig } from './config/RuntimeConfig'
 
+// Debug: Check environment variables at config time
+console.log('🚀 nuxt.config.ts - Environment variables at config time:')
+console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'NOT_SET')
+console.log('FACEBOOK_CONFIG_ID:', process.env.FACEBOOK_CONFIG_ID || 'NOT_SET')
+console.log('OPERATION_URL:', process.env.OPERATION_URL || 'NOT_SET')
+console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID || 'NOT_SET')
+
+// Call getRunTimeConfig and log result
+const runtimeConfig = getRunTimeConfig()
+console.log('🧪 Runtime config result:', JSON.stringify(runtimeConfig, null, 2))
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -27,8 +38,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    app: {
-      ...getRunTimeConfig()
+    public: {
+      ...runtimeConfig
     }
   },
 

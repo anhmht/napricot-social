@@ -6,29 +6,24 @@ export interface RuntimeConfig {
 }
 
 export const getRunTimeConfig = () => {
-  // Force output to stderr so it shows in GitHub Actions logs
-  console.error('🔍 RuntimeConfig Debug:')
-  console.error('OPERATION_URL:', process.env.OPERATION_URL || 'undefined')
-  console.error('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'undefined')
-  console.error(
+  // Use console.log and console.error to ensure visibility
+  console.log('🔍 RuntimeConfig Debug - Environment Variables:')
+  console.log('OPERATION_URL:', process.env.OPERATION_URL || 'undefined')
+  console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'undefined')
+  console.log(
     'FACEBOOK_CONFIG_ID:',
     process.env.FACEBOOK_CONFIG_ID || 'undefined'
   )
-  console.error(
-    'GOOGLE_CLIENT_ID:',
-    process.env.GOOGLE_CLIENT_ID || 'undefined'
-  )
+  console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID || 'undefined')
 
-  // Temporary test values to verify the config structure works
-  const testConfig = {
+  const config = {
     operationUrl: process.env.OPERATION_URL || 'https://api.napricot.com',
-    facebookAppId: process.env.FACEBOOK_APP_ID || 'test-facebook-app-id',
-    facebookConfigId:
-      process.env.FACEBOOK_CONFIG_ID || 'test-facebook-config-id',
-    googleClientId: process.env.GOOGLE_CLIENT_ID || 'test-google-client-id'
+    facebookAppId: process.env.FACEBOOK_APP_ID || '',
+    facebookConfigId: process.env.FACEBOOK_CONFIG_ID || '',
+    googleClientId: process.env.GOOGLE_CLIENT_ID || ''
   }
 
-  console.error('🧪 Final config:', JSON.stringify(testConfig, null, 2))
+  console.log('🧪 Final Runtime Config:', JSON.stringify(config, null, 2))
 
-  return testConfig
+  return config
 }

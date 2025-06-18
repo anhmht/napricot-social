@@ -76,6 +76,13 @@ jobs:
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Debug environment variables before build
+        run: |
+          echo "🔍 Environment variables available to Nuxt:"
+          echo "FACEBOOK_APP_ID: $FACEBOOK_APP_ID"
+          echo "FACEBOOK_CONFIG_ID: $FACEBOOK_CONFIG_ID"
+          echo "OPERATION_URL: $OPERATION_URL"
+          echo "GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID"
       - name: Static HTML export with Nuxt
         run: ${{ steps.detect-package-manager.outputs.manager }} run generate
       - name: Upload artifact
