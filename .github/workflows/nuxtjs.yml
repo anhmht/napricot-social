@@ -71,25 +71,17 @@ jobs:
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Debug environment variables
+      - name: Create environment file
         run: |
-          echo "Checking environment variables..."
-          echo "OPERATION_URL is set: $(if [ -n "$OPERATION_URL" ]; then echo 'YES'; else echo 'NO'; fi)"
-          echo "FACEBOOK_APP_ID is set: $(if [ -n "$FACEBOOK_APP_ID" ]; then echo 'YES'; else echo 'NO'; fi)"
-          echo "FACEBOOK_CONFIG_ID is set: $(if [ -n "$FACEBOOK_CONFIG_ID" ]; then echo 'YES'; else echo 'NO'; fi)"
-          echo "GOOGLE_CLIENT_ID is set: $(if [ -n "$GOOGLE_CLIENT_ID" ]; then echo 'YES'; else echo 'NO'; fi)"
-        env:
-          OPERATION_URL: ${{ secrets.OPERATION_URL }}
-          FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
-          FACEBOOK_CONFIG_ID: ${{ secrets.FACEBOOK_CONFIG_ID }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          echo "Creating .env file..."
+          echo "OPERATION_URL=${{ secrets.OPERATION_URL }}" > .env
+          echo "FACEBOOK_APP_ID=${{ secrets.FACEBOOK_APP_ID }}" >> .env
+          echo "FACEBOOK_CONFIG_ID=${{ secrets.FACEBOOK_CONFIG_ID }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "Environment file created:"
+          cat .env
       - name: Static HTML export with Nuxt
         run: ${{ steps.detect-package-manager.outputs.manager }} run generate
-        env:
-          OPERATION_URL: ${{ secrets.OPERATION_URL }}
-          FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
-          FACEBOOK_CONFIG_ID: ${{ secrets.FACEBOOK_CONFIG_ID }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -34,10 +34,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     app: {
-      operationUrl: process.env.OPERATION_URL,
-      facebookAppId: process.env.FACEBOOK_APP_ID || '',
-      facebookConfigId: process.env.FACEBOOK_CONFIG_ID || '',
-      googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+      ...getRunTimeConfig()
     }
   },
 
