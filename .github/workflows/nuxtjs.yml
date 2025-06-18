@@ -29,11 +29,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: Environment
-    env:
-      OPERATION_URL: ${{ secrets.OPERATION_URL }}
-      FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
-      FACEBOOK_CONFIG_ID: ${{ secrets.FACEBOOK_CONFIG_ID }}
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
