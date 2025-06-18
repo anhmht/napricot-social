@@ -26,7 +26,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    app: {
+    public: {
       ...getRunTimeConfig()
     }
   },
