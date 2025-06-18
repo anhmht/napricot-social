@@ -19,10 +19,16 @@ export const getRunTimeConfig = () => {
     process.env.GOOGLE_CLIENT_ID || 'undefined'
   )
 
-  return {
-    operationUrl: process.env.OPERATION_URL,
-    facebookAppId: process.env.FACEBOOK_APP_ID || '',
-    facebookConfigId: process.env.FACEBOOK_CONFIG_ID || '',
-    googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+  // Temporary test values to verify the config structure works
+  const testConfig = {
+    operationUrl: process.env.OPERATION_URL || 'https://api.napricot.com',
+    facebookAppId: process.env.FACEBOOK_APP_ID || 'test-facebook-app-id',
+    facebookConfigId:
+      process.env.FACEBOOK_CONFIG_ID || 'test-facebook-config-id',
+    googleClientId: process.env.GOOGLE_CLIENT_ID || 'test-google-client-id'
   }
+
+  console.error('🧪 Final config:', JSON.stringify(testConfig, null, 2))
+
+  return testConfig
 }

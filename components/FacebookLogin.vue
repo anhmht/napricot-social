@@ -59,7 +59,7 @@ const isLoading = ref(false)
 const user = ref<FacebookUser | null>(null)
 
 const {
-  public: { facebookAppId, facebookConfigId }
+  app: { facebookAppId, facebookConfigId }
 } = useRuntimeConfig()
 
 onMounted(() => {

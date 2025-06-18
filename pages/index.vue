@@ -3,12 +3,8 @@
     <h1>Welcome to Napricot Social</h1>
     <p>Connect with your social accounts to get started!</p>
     <div class="login-options">
-      <ClientOnly>
-        <FacebookLogin />
-      </ClientOnly>
-      <ClientOnly>
-        <YouTubeLogin />
-      </ClientOnly>
+      <FacebookLogin />
+      <YouTubeLogin />
     </div>
   </div>
 </template>
