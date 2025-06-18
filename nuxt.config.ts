@@ -2,15 +2,27 @@ import fontsPreload from './config/Font'
 import { getRunTimeConfig } from './config/RuntimeConfig'
 
 // Debug: Check environment variables at config time
-console.log('🚀 nuxt.config.ts - Environment variables at config time:')
-console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'NOT_SET')
-console.log('FACEBOOK_CONFIG_ID:', process.env.FACEBOOK_CONFIG_ID || 'NOT_SET')
-console.log('OPERATION_URL:', process.env.OPERATION_URL || 'NOT_SET')
-console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID || 'NOT_SET')
+process.stdout.write(
+  '\n🚀 nuxt.config.ts - Environment variables at config time:\n'
+)
+process.stdout.write(
+  `FACEBOOK_APP_ID: ${process.env.FACEBOOK_APP_ID || 'NOT_SET'}\n`
+)
+process.stdout.write(
+  `FACEBOOK_CONFIG_ID: ${process.env.FACEBOOK_CONFIG_ID || 'NOT_SET'}\n`
+)
+process.stdout.write(
+  `OPERATION_URL: ${process.env.OPERATION_URL || 'NOT_SET'}\n`
+)
+process.stdout.write(
+  `GOOGLE_CLIENT_ID: ${process.env.GOOGLE_CLIENT_ID || 'NOT_SET'}\n`
+)
 
 // Call getRunTimeConfig and log result
 const runtimeConfig = getRunTimeConfig()
-console.log('🧪 Runtime config result:', JSON.stringify(runtimeConfig, null, 2))
+process.stdout.write(
+  `🧪 Runtime config result: ${JSON.stringify(runtimeConfig, null, 2)}\n`
+)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({

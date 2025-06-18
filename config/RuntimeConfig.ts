@@ -6,15 +6,20 @@ export interface RuntimeConfig {
 }
 
 export const getRunTimeConfig = () => {
-  // Use console.log and console.error to ensure visibility
-  console.log('🔍 RuntimeConfig Debug - Environment Variables:')
-  console.log('OPERATION_URL:', process.env.OPERATION_URL || 'undefined')
-  console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'undefined')
-  console.log(
-    'FACEBOOK_CONFIG_ID:',
-    process.env.FACEBOOK_CONFIG_ID || 'undefined'
+  // Use process.stdout.write to ensure visibility in GitHub Actions
+  process.stdout.write('\n🔍 RuntimeConfig Debug - Environment Variables:\n')
+  process.stdout.write(
+    `OPERATION_URL: ${process.env.OPERATION_URL || 'undefined'}\n`
   )
-  console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID || 'undefined')
+  process.stdout.write(
+    `FACEBOOK_APP_ID: ${process.env.FACEBOOK_APP_ID || 'undefined'}\n`
+  )
+  process.stdout.write(
+    `FACEBOOK_CONFIG_ID: ${process.env.FACEBOOK_CONFIG_ID || 'undefined'}\n`
+  )
+  process.stdout.write(
+    `GOOGLE_CLIENT_ID: ${process.env.GOOGLE_CLIENT_ID || 'undefined'}\n`
+  )
 
   const config = {
     operationUrl: process.env.OPERATION_URL || 'https://api.napricot.com',
@@ -23,7 +28,9 @@ export const getRunTimeConfig = () => {
     googleClientId: process.env.GOOGLE_CLIENT_ID || ''
   }
 
-  console.log('🧪 Final Runtime Config:', JSON.stringify(config, null, 2))
+  process.stdout.write(
+    `🧪 Final Runtime Config: ${JSON.stringify(config, null, 2)}\n`
+  )
 
   return config
 }
