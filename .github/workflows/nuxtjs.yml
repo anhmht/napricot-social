@@ -78,8 +78,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Validate Nuxt config
         run: |
-          echo "Checking nuxt.config.ts syntax..."
-          node -c nuxt.config.ts && echo "✅ Config syntax is valid" || echo "❌ Config syntax error"
+          echo "Checking nuxt.config.ts with TypeScript..."
+          npx tsc --noEmit --skipLibCheck nuxt.config.ts && echo "✅ Config TypeScript is valid" || echo "❌ Config TypeScript error"
       - name: Debug environment variables before build
         run: |
           echo "🔍 Environment variables available to Nuxt:"

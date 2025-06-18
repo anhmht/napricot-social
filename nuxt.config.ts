@@ -1,15 +1,7 @@
-import fontsPreload from './config/Font'
-
-// Simple debug at top level
-console.log('🚀 NUXT CONFIG LOADING...')
-console.log('Environment variables:')
-console.log('- FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'NOT_SET')
-console.log(
-  '- FACEBOOK_CONFIG_ID:',
-  process.env.FACEBOOK_CONFIG_ID || 'NOT_SET'
-)
-console.log('- OPERATION_URL:', process.env.OPERATION_URL || 'NOT_SET')
-console.log('- GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID || 'NOT_SET')
+// Debug logging
+console.log('🚀 Loading Nuxt config...')
+console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID || 'NOT_SET')
+console.log('FACEBOOK_CONFIG_ID:', process.env.FACEBOOK_CONFIG_ID || 'NOT_SET')
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -52,7 +44,7 @@ export default defineNuxtConfig({
       },
       title: 'Napricot Social',
       charset: 'utf-8',
-      link: [...fontsPreload],
+
       script: [
         {
           async: true,
