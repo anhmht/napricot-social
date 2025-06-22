@@ -22,8 +22,8 @@ export default defineNuxtConfig({
     host: 'dev.napricot.com',
     port: Number(process.env.NUXT_PORT) || 3000,
     https: {
-      key: '.ssl/localhost.key',
-      cert: '.ssl/localhost.crt'
+      key: '.ssl/dev.napricot.com.key',
+      cert: '.ssl/dev.napricot.com.crt'
     }
   },
 

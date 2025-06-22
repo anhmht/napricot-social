@@ -3,7 +3,7 @@ export function $api<T>(
   opts?: Parameters<typeof $fetch<T>>[1]
 ): Promise<any> {
   const config = useRuntimeConfig()
-  return $fetch<T>(`${config.app.operationUrl}${request}`, {
+  return $fetch<T>(`${config.public.operationUrl}${request}`, {
     ...opts,
     headers: {
       ...opts?.headers

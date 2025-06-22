@@ -52,6 +52,7 @@ const isGoogleLoaded = ref(false)
 const isLoading = ref(false)
 const user = ref<GoogleUser | null>(null)
 const accessToken = ref<string | null>(null)
+const refreshToken = ref<string | null>(null)
 const tokenClient = ref<any>(null)
 const clientId = ref<string>('')
 
@@ -67,16 +68,27 @@ onMounted(() => {
 const initializeGoogleSDK = () => {
   const checkGoogle = () => {
     if (typeof window !== 'undefined' && window.google) {
-      // Initialize OAuth2 token client using new Google Identity Services
-      tokenClient.value = window.google.accounts.oauth2.initTokenClient({
-        client_id: clientId.value,
-        scope:
-          'profile email https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload',
-        callback: handleTokenResponse
-      })
+      try {
+        // Initialize OAuth2 code client using new Google Identity Services with ux_mode popup
+        tokenClient.value = window.google.accounts.oauth2.initCodeClient({
+          client_id: clientId.value,
+          scope:
+            'profile email https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload',
+          ux_mode: 'popup',
+          redirect_uri: window.location.origin,
+          callback: handleCodeResponse,
+          error_callback: (error: any) => {
+            console.error('Google OAuth error:', error)
+            isLoading.value = false
+          }
+        })
 
-      isGoogleLoaded.value = true
-      console.log('Google Identity Services initialized')
+        isGoogleLoaded.value = true
+        console.log('Google Identity Services initialized with code flow')
+      } catch (error) {
+        console.error('Error initializing Google SDK:', error)
+        setTimeout(checkGoogle, 1000)
+      }
     } else {
       setTimeout(checkGoogle, 100)
     }
@@ -89,21 +101,56 @@ const loginWithGoogle = () => {
 
   isLoading.value = true
 
-  // Request access token using new GIS library
-  tokenClient.value.requestAccessToken({
-    prompt: 'consent'
-  })
+  try {
+    // Request authorization code using new GIS library with error handling
+    tokenClient.value.requestCode()
+  } catch (error) {
+    console.error('Error requesting authorization code:', error)
+    isLoading.value = false
+  }
 }
 
-const handleTokenResponse = async (response: TokenResponse) => {
-  if (response.access_token) {
-    accessToken.value = response.access_token
-    console.log('Access token received:', response.access_token)
+const handleCodeResponse = async (response: any) => {
+  if (response.code) {
+    console.log('Authorization code received:', response.code)
 
-    // Fetch user info using the access token
-    await fetchUserInfo(response.access_token)
+    // Exchange authorization code for tokens
+    await exchangeCodeForTokens(response.code)
   } else {
-    console.error('No access token received')
+    console.error('No authorization code received')
+    isLoading.value = false
+  }
+}
+
+const exchangeCodeForTokens = async (code: string) => {
+  try {
+    // Send authorization code to backend for token exchange
+    const response = await $api('/api/youtube/exchange-token', {
+      method: 'POST',
+      body: {
+        code: code,
+        redirect_uri: window.location.origin
+      }
+    })
+
+    if (response && response.data) {
+      accessToken.value = response.data.access_token
+
+      // Store refresh token if provided by backend
+      if (response.data.refresh_token) {
+        refreshToken.value = response.data.refresh_token
+        console.log('Refresh token received from backend')
+      }
+
+      console.log('YouTube login successful, tokens received from backend')
+
+      // Fetch user info using the access token
+      await fetchUserInfo(response.data.access_token)
+    } else {
+      throw new Error('No access token received from backend')
+    }
+  } catch (error) {
+    console.error('Error exchanging code for tokens:', error)
     isLoading.value = false
   }
 }
@@ -152,6 +199,7 @@ const logout = () => {
 
   user.value = null
   accessToken.value = null
+  refreshToken.value = null
   console.log('User signed out from YouTube.')
 }
 
