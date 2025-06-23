@@ -1,5 +1,16 @@
 <template>
   <div class="facebook-login">
+    <div v-if="user" class="user-info">
+      <img
+        :src="user.picture?.data?.url"
+        :alt="user.name"
+        class="user-avatar"
+      />
+      <div>
+        <p>Welcome, {{ user.name }}!</p>
+        <button @click="logout" class="logout-btn">Logout</button>
+      </div>
+    </div>
     <button
       @click="loginWithFacebook"
       :disabled="!isFbLoaded || isLoading"
@@ -16,18 +27,6 @@
       <div v-else class="loading-spinner"></div>
       {{ isLoading ? 'Logging in...' : 'Login with Facebook' }}
     </button>
-
-    <div v-if="user" class="user-info">
-      <img
-        :src="user.picture?.data?.url"
-        :alt="user.name"
-        class="user-avatar"
-      />
-      <div>
-        <p>Welcome, {{ user.name }}!</p>
-        <button @click="logout" class="logout-btn">Logout</button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -146,7 +145,6 @@ declare global {
 <style lang="postcss" scoped>
 .facebook-login {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 1rem;
 }

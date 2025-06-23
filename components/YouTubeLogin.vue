@@ -1,5 +1,12 @@
 <template>
   <div class="youtube-login">
+    <div v-if="user" class="user-info">
+      <img :src="user.picture" :alt="user.name" class="user-avatar" />
+      <div>
+        <p>Welcome, {{ user.name }}!</p>
+        <button @click="logout" class="logout-btn">Logout</button>
+      </div>
+    </div>
     <button
       @click="loginWithGoogle"
       :disabled="!isGoogleLoaded || isLoading"
@@ -16,15 +23,6 @@
       <div v-else class="loading-spinner"></div>
       {{ isLoading ? 'Logging in...' : 'Login with YouTube' }}
     </button>
-
-    <div v-if="user" class="user-info">
-      <img :src="user.picture" :alt="user.name" class="user-avatar" />
-      <div>
-        <p>Welcome, {{ user.name }}!</p>
-        <p class="user-email">{{ user.email }}</p>
-        <button @click="logout" class="logout-btn">Logout</button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -211,7 +209,6 @@ declare global {
 <style lang="postcss" scoped>
 .youtube-login {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 1rem;
 }
