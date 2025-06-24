@@ -7,6 +7,7 @@ export function $api<T>(
     ...opts,
     headers: {
       ...opts?.headers
-    }
+    },
+    credentials: 'include'
   })
 }

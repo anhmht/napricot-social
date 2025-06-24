@@ -2,7 +2,12 @@
   <Connection />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Connection from '~/components/Page/Connection/Connection.vue'
+definePageMeta({
+  middleware: 'auth'
+})
+</script>
 
 <style lang="postcss">
 .connections-container {

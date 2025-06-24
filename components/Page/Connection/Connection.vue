@@ -38,7 +38,12 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ConnectionItem from '~/components/Page/Connection/ConnectionItem.vue'
+import FacebookLogin from '~/components/Page/Connection/FacebookLogin.vue'
+import YouTubeLogin from '~/components/Page/Connection/YouTubeLogin.vue'
+import ThreadLogin from '~/components/Page/Connection/ThreadLogin.vue'
+</script>
 
 <style lang="postcss">
 .connections-container {
