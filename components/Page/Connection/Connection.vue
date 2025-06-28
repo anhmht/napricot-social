@@ -3,9 +3,8 @@
     <div class="connections-header">
       <h1>Connections</h1>
     </div>
-
+    <h2>Facebook</h2>
     <div class="connections-list">
-      <!-- Facebook Connection -->
       <ConnectionItem
         icon-src="/icons/facebook.svg"
         icon-alt="Facebook"
@@ -14,8 +13,9 @@
       >
         <FacebookLogin />
       </ConnectionItem>
-
-      <!-- YouTube Connection -->
+    </div>
+    <h2>YouTube</h2>
+    <div class="connections-list">
       <ConnectionItem
         icon-src="/icons/youtube.svg"
         icon-alt="YouTube"
@@ -24,8 +24,9 @@
       >
         <YouTubeLogin />
       </ConnectionItem>
-
-      <!-- Threads Connection -->
+    </div>
+    <h2>Threads</h2>
+    <div class="connections-list">
       <ConnectionItem
         icon-src="/icons/threads.svg"
         icon-alt="Threads"
@@ -52,6 +53,9 @@ import ThreadLogin from '~/components/Page/Connection/ThreadLogin.vue'
   padding: 2rem;
   background-color: #f8f9fa;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
 
 .connections-header {

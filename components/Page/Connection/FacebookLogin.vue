@@ -11,11 +11,7 @@
         <button @click="logout" class="logout-btn">Logout</button>
       </div>
     </div>
-    <button
-      @click="loginWithFacebook"
-      :disabled="!isFbLoaded || isLoading"
-      class="fb-login-btn"
-    >
+    <button @click="login" :disabled="isLoading" class="fb-login-btn">
       <img
         v-if="!isLoading"
         src="/icons/facebook.svg"
@@ -27,82 +23,64 @@
       <div v-else class="loading-spinner"></div>
       {{ isLoading ? 'Logging in...' : 'Login with Facebook' }}
     </button>
+    <FacebookConfigModal
+      v-model="isModalOpen"
+      :data="formData"
+      @submit="handleSubmit"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-interface FacebookUser {
-  id: string
-  name: string
-  email?: string
-  picture?: {
-    data: {
-      url: string
-    }
-  }
-}
+import FacebookConfigModal from './FacebookConfigModal.vue'
 
-interface FacebookLoginResponse {
-  authResponse: {
-    accessToken: string
-    userID: string
-  } | null
-  status: string
-}
-
-const isFbLoaded = ref(false)
 const isLoading = ref(false)
+const isModalOpen = ref(false)
 const user = ref<FacebookUser | null>(null)
 
-const appId = ref<string>('')
-const configId = ref<string>('')
+// Form data
+const formData = reactive<FacebookFormData>({
+  appId: '',
+  configId: '',
+  pages: [],
+  selectedPageId: '',
+  pageName: '',
+  userId: '',
+  username: '',
+  userAccessToken: '',
+  pageAccessToken: '',
+  userPicture: ''
+})
+
+const isFbLoaded = ref(false)
 
 onMounted(() => {
   const {
     public: { facebookAppId, facebookConfigId }
   } = useRuntimeConfig()
-  appId.value = facebookAppId as string
-  configId.value = facebookConfigId as string
-
+  formData.appId = facebookAppId
+  formData.configId = facebookConfigId
   initializeFacebookSDK()
 })
 
 const initializeFacebookSDK = () => {
   // Wait for Facebook SDK to load
-  const checkFB = () => {
-    if (typeof window !== 'undefined' && window.FB) {
-      window.FB.init({
-        appId: appId.value,
-        cookie: true,
-        xfbml: true,
-        version: 'v23.0'
-      })
-
-      isFbLoaded.value = true
-
-      // Check if user is already logged in
-      window.FB.getLoginStatus((response: FacebookLoginResponse) => {
-        if (response.status === 'connected') {
-          getUserInfo()
-        }
-      })
-    } else {
-      setTimeout(checkFB, 100)
-    }
+  if (typeof window !== 'undefined' && window.FB) {
+    window.FB.init({
+      appId: formData.appId,
+      cookie: true,
+      xfbml: true,
+      version: 'v23.0'
+    })
+    isFbLoaded.value = true
   }
-  checkFB()
 }
 
-const loginWithFacebook = () => {
-  if (!isFbLoaded.value) return
-
-  isLoading.value = true
-
+const login = () => {
   window.FB.login(
     (response: FacebookLoginResponse) => {
       if (response.authResponse) {
-        console.log('User logged in:', response)
-        getUserInfo()
+        getUserInfo(response)
       } else {
         console.log('User cancelled login or did not fully authorize.')
         isLoading.value = false
@@ -110,29 +88,47 @@ const loginWithFacebook = () => {
     },
     {
       scope: 'email,public_profile',
-      config_id: configId.value
+      config_id: formData.configId
     }
   )
 }
 
-const getUserInfo = () => {
+const getUserInfo = (authResponse: FacebookLoginResponse) => {
   window.FB.api(
     '/me',
-    { fields: 'name,email,picture' },
-    (response: FacebookUser) => {
-      user.value = response
+    { fields: 'name,picture' },
+    async (response: FacebookUser) => {
+      isLoading.value = true
+      const pages = await $api('/api/facebook/pages', {
+        method: 'POST',
+        body: {
+          accessToken: authResponse.authResponse?.accessToken,
+          userId: response.id
+        }
+      })
+      formData.userId = response.id
+      formData.pages = pages.data.map((page: any) => ({
+        id: page.id,
+        name: page.name,
+        accessToken: page.access_token
+      }))
+      formData.username = response.name
+      formData.userAccessToken = authResponse.authResponse?.accessToken || ''
+      formData.userPicture = response.picture?.data?.url || ''
+
+      isModalOpen.value = true
       isLoading.value = false
-      console.log('User info:', response)
     }
   )
 }
 
 const logout = () => {
   window.FB.logout(() => {
-    user.value = null
     console.log('User logged out.')
   })
 }
+
+const handleSubmit = (data: FacebookPage) => {}
 
 // Declare FB as a global
 declare global {

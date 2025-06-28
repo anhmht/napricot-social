@@ -5,7 +5,6 @@
         <img :src="iconSrc" :alt="iconAlt" width="24" height="24" />
       </div>
       <div class="connection-details">
-        <h3>{{ title }}</h3>
         <slot />
       </div>
     </div>

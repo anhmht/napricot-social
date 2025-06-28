@@ -62,6 +62,10 @@ export default defineNuxtConfig({
 
   css: ['~/assets/styles/main.css'],
 
+  imports: {
+    dirs: ['models/*.ts']
+  },
+
   postcss: {
     plugins: {
       'postcss-import': {},

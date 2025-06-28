@@ -7,41 +7,31 @@
       </div>
 
       <form @submit.prevent="handleLogin" class="login-form">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            v-model="loginForm.email"
-            type="email"
-            placeholder="Enter your email"
-            required
-            :disabled="isLoading"
-            :class="{ error: validationErrors.email }"
-            @blur="validateEmailField"
-            @input="validationErrors.email && validateEmailField()"
-          />
-          <div v-if="validationErrors.email" class="field-error">
-            {{ validationErrors.email }}
-          </div>
-        </div>
+        <InputField
+          id="email"
+          v-model="loginForm.email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+          required
+          :disabled="isLoading"
+          :error-message="validationErrors.email"
+          @blur="validateEmailField"
+          @input="validationErrors.email && validateEmailField()"
+        />
 
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            v-model="loginForm.password"
-            type="password"
-            placeholder="Enter your password"
-            required
-            :disabled="isLoading"
-            :class="{ error: validationErrors.password }"
-            @blur="validatePasswordField"
-            @input="validationErrors.password && validatePasswordField()"
-          />
-          <div v-if="validationErrors.password" class="field-error">
-            {{ validationErrors.password }}
-          </div>
-        </div>
+        <InputField
+          id="password"
+          v-model="loginForm.password"
+          label="Password"
+          type="password"
+          placeholder="Enter your password"
+          required
+          :disabled="isLoading"
+          :error-message="validationErrors.password"
+          @blur="validatePasswordField"
+          @input="validationErrors.password && validatePasswordField()"
+        />
 
         <div class="form-options">
           <label class="checkbox-label">
@@ -55,10 +45,16 @@
           <a href="#" class="forgot-password">Forgot password?</a>
         </div>
 
-        <button type="submit" class="login-button" :disabled="isLoading">
-          <span v-if="isLoading">Signing in...</span>
-          <span v-else>Sign In</span>
-        </button>
+        <Button
+          variant="primary"
+          type="submit"
+          :disabled="isLoading"
+          :loading="isLoading"
+          loading-text="Signing in..."
+          full-width
+        >
+          Sign In
+        </Button>
       </form>
 
       <div v-if="errorMessage" class="error-message">
@@ -189,50 +185,6 @@ const handleLogin = async () => {
   gap: 20px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  color: var(--color-text);
-  font-weight: 500;
-  font-size: 1.4rem;
-}
-
-.form-group input {
-  padding: 12px 16px;
-  border: 1px solid var(--color-grayscale-30);
-  border-radius: 8px;
-  font-size: 1.6rem;
-  transition: border-color 0.2s ease;
-  font-family: 'SVN-Circular', sans-serif;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(236, 88, 37, 0.1);
-}
-
-.form-group input:disabled {
-  background-color: var(--color-bg-disabled);
-  cursor: not-allowed;
-}
-
-.form-group input.error {
-  border-color: var(--color-error);
-  box-shadow: 0 0 0 3px rgba(244, 0, 59, 0.1);
-}
-
-.field-error {
-  color: var(--color-error);
-  font-size: 1.2rem;
-  margin-top: 4px;
-  font-weight: 400;
-}
-
 .form-options {
   display: flex;
   justify-content: space-between;
@@ -265,29 +217,6 @@ const handleLogin = async () => {
 
 .forgot-password:hover {
   text-decoration: underline;
-}
-
-.login-button {
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-family: 'SVN-Circular', sans-serif;
-  margin-top: 8px;
-}
-
-.login-button:hover:not(:disabled) {
-  background-color: var(--color-primary-light);
-}
-
-.login-button:disabled {
-  background-color: var(--color-bg-disabled);
-  cursor: not-allowed;
 }
 
 .error-message {
