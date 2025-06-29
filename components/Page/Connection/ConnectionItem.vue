@@ -72,7 +72,6 @@ defineProps<Props>()
 .connection-details {
   flex: 1;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 

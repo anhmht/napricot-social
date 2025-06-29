@@ -3,16 +3,9 @@
     <div class="connections-header">
       <h1>Connections</h1>
     </div>
-    <h2>Facebook</h2>
+    <FacebookHeader />
     <div class="connections-list">
-      <ConnectionItem
-        icon-src="/icons/facebook.svg"
-        icon-alt="Facebook"
-        icon-class="facebook"
-        title="Facebook Connect"
-      >
-        <FacebookLogin />
-      </ConnectionItem>
+      <FacebookConnection />
     </div>
     <h2>YouTube</h2>
     <div class="connections-list">
@@ -41,9 +34,10 @@
 
 <script setup lang="ts">
 import ConnectionItem from '~/components/Page/Connection/ConnectionItem.vue'
-import FacebookLogin from '~/components/Page/Connection/FacebookLogin.vue'
+import FacebookHeader from '~/components/Page/Connection/Facebook/FacebookHeader.vue'
 import YouTubeLogin from '~/components/Page/Connection/YouTubeLogin.vue'
 import ThreadLogin from '~/components/Page/Connection/ThreadLogin.vue'
+import FacebookConnection from '~/components/Page/Connection/Facebook/FacebookConnection.vue'
 </script>
 
 <style lang="postcss">

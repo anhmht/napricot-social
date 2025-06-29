@@ -1,28 +1,16 @@
 <template>
   <div class="facebook-login">
-    <div v-if="user" class="user-info">
-      <img
-        :src="user.picture?.data?.url"
-        :alt="user.name"
-        class="user-avatar"
-      />
-      <div>
-        <p>Welcome, {{ user.name }}!</p>
-        <button @click="logout" class="logout-btn">Logout</button>
-      </div>
+    <h2>Facebook</h2>
+    <div>
+      <Button
+        class="facebook-add-button"
+        variant="default"
+        @click="login"
+        :disabled="isLoading"
+      >
+        <i class="icon-add"></i> Add
+      </Button>
     </div>
-    <button @click="login" :disabled="isLoading" class="fb-login-btn">
-      <img
-        v-if="!isLoading"
-        src="/icons/facebook.svg"
-        alt="Facebook"
-        width="20"
-        height="20"
-        class="login-icon"
-      />
-      <div v-else class="loading-spinner"></div>
-      {{ isLoading ? 'Logging in...' : 'Login with Facebook' }}
-    </button>
     <FacebookConfigModal
       v-model="isModalOpen"
       :data="formData"
@@ -32,11 +20,11 @@
 </template>
 
 <script setup lang="ts">
+import Button from '~/components/Button.vue'
 import FacebookConfigModal from './FacebookConfigModal.vue'
 
 const isLoading = ref(false)
 const isModalOpen = ref(false)
-const user = ref<FacebookUser | null>(null)
 
 // Form data
 const formData = reactive<FacebookFormData>({
@@ -143,85 +131,11 @@ declare global {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: space-between;
 }
-
-.fb-login-btn {
+.facebook-add-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #1877f2;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 155px;
-}
-
-.fb-login-btn:hover:not(:disabled) {
-  background-color: #166fe5;
-}
-
-.fb-login-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.login-icon {
-  filter: brightness(0) invert(1); /* Makes the icon white */
-}
-
-.loading-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 0.5rem;
-  border: 1px solid #e9ecef;
-}
-
-.user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.logout-btn {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  margin-top: 0.5rem;
-  transition: background-color 0.2s;
-}
-
-.logout-btn:hover {
-  background-color: #5a6268;
 }
 </style>

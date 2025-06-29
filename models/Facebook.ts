@@ -36,3 +36,18 @@ export interface FacebookFormData {
   pageAccessToken: string
   userPicture: string
 }
+
+export interface FacebookConnection {
+  facebookId: string
+  facebookUsername: string
+  facebookEmail?: string
+  avatar?: string
+  pageId: string
+  pageName: string
+  pageAvatar?: string
+  pageCategory?: string
+  pageAccessToken: string
+  userAccessToken: string
+  createdAt: Date
+  updatedAt: Date
+}
