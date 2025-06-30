@@ -109,6 +109,7 @@ const handleSubmit = async () => {
     return
   }
 
+  isLoading.value = true
   const data = props.data.pages.find(
     (page) => page.id === formData.pageId
   ) as FacebookPage

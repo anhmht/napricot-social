@@ -4,7 +4,7 @@
     <div>
       <Button
         class="facebook-add-button"
-        variant="default"
+        variant="primary"
         @click="login"
         :disabled="isLoading"
       >
@@ -65,6 +65,7 @@ const initializeFacebookSDK = () => {
 }
 
 const login = () => {
+  isLoading.value = true
   window.FB.login(
     (response: FacebookLoginResponse) => {
       if (response.authResponse) {
@@ -116,7 +117,14 @@ const logout = () => {
   })
 }
 
-const handleSubmit = (data: FacebookPage) => {}
+const emit = defineEmits<{
+  'connection-added': [data: FacebookPage]
+}>()
+
+const handleSubmit = (data: FacebookPage) => {
+  // Emit event to parent component
+  emit('connection-added', data)
+}
 
 // Declare FB as a global
 declare global {

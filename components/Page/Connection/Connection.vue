@@ -3,9 +3,9 @@
     <div class="connections-header">
       <h1>Connections</h1>
     </div>
-    <FacebookHeader />
+    <FacebookHeader @connection-added="handleConnectionAdded" />
     <div class="connections-list">
-      <FacebookConnection />
+      <FacebookConnection ref="facebookConnectionRef" />
     </div>
     <h2>YouTube</h2>
     <div class="connections-list">
@@ -38,6 +38,19 @@ import FacebookHeader from '~/components/Page/Connection/Facebook/FacebookHeader
 import YouTubeLogin from '~/components/Page/Connection/YouTubeLogin.vue'
 import ThreadLogin from '~/components/Page/Connection/ThreadLogin.vue'
 import FacebookConnection from '~/components/Page/Connection/Facebook/FacebookConnection.vue'
+
+// Template ref for FacebookConnection component
+const facebookConnectionRef = ref<InstanceType<
+  typeof FacebookConnection
+> | null>(null)
+
+// Handle connection added event from FacebookHeader
+const handleConnectionAdded = () => {
+  // Trigger refresh in FacebookConnection
+  if (facebookConnectionRef.value) {
+    facebookConnectionRef.value.refreshConnections()
+  }
+}
 </script>
 
 <style lang="postcss">
@@ -50,6 +63,7 @@ import FacebookConnection from '~/components/Page/Connection/Facebook/FacebookCo
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  position: relative;
 }
 
 .connections-header {
@@ -70,6 +84,7 @@ import FacebookConnection from '~/components/Page/Connection/Facebook/FacebookCo
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  position: relative;
 }
 
 @media (max-width: 768px) {

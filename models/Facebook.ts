@@ -48,6 +48,7 @@ export interface FacebookConnection {
   pageCategory?: string
   pageAccessToken: string
   userAccessToken: string
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
 }

@@ -12,7 +12,10 @@
     ]"
     @click="handleClick"
   >
-    <span v-if="loading">{{ loadingText }}</span>
+    <span v-if="loading" class="btn__loading-content">
+      <div class="btn__spinner"></div>
+      <span>{{ loadingText }}</span>
+    </span>
     <slot v-else />
   </button>
 </template>
@@ -71,6 +74,35 @@ const handleClick = (event: MouseEvent) => {
 
 .btn--loading {
   cursor: not-allowed;
+}
+
+.btn__loading-content {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.btn__spinner {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: btn-spin 1s linear infinite;
+}
+
+.btn--default .btn__spinner {
+  border: 2px solid var(--color-grayscale-40);
+  border-top: 2px solid var(--color-text);
+}
+
+@keyframes btn-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .btn--full-width {

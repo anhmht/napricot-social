@@ -21,7 +21,22 @@
       :description="connection.pageCategory"
     />
     <div class="connection-actions">
-      <Button>
+      <Switch
+        v-model="connection.isActive"
+        :disabled="isLoading"
+        label="Active"
+        @change="
+          toggleConnection(
+            connection.facebookId,
+            connection.pageId,
+            connection.isActive
+          )
+        "
+      />
+      <Button
+        @click="deleteConnection(connection.facebookId, connection.pageId)"
+        :disabled="isLoading || connection.isActive"
+      >
         <i class="icon-delete"></i>
       </Button>
     </div>
@@ -29,19 +44,75 @@
   <div v-else class="no-connections">
     <p>No connections found</p>
   </div>
+  <Loading :loading="isLoading" />
 </template>
 
 <script setup lang="ts">
 import ConnectionItem from '../ConnectionItem.vue'
 import UserInfo from '../UserInfo/index.vue'
+import Loading from '~/components/Loading.vue'
 
 const connections = ref<FacebookConnection[]>([])
+const isLoading = ref(false)
 
-onMounted(async () => {
-  const { data } = await $api('/api/facebook/connections', {
-    method: 'GET'
-  })
-  connections.value = data
+const fetchConnections = async () => {
+  isLoading.value = true
+  try {
+    const { data } = await $api('/api/facebook/connections', {
+      method: 'GET'
+    })
+    connections.value = data
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const refreshConnections = () => {
+  fetchConnections()
+}
+
+const deleteConnection = async (facebookId: string, pageId: string) => {
+  try {
+    isLoading.value = true
+    await $api(`/api/facebook/remove-connection/${facebookId}/${pageId}`, {
+      method: 'DELETE'
+    })
+    await fetchConnections()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const toggleConnection = async (
+  facebookId: string,
+  pageId: string,
+  isActive: boolean
+) => {
+  try {
+    isLoading.value = true
+    await $api(`/api/facebook/active-connection/${facebookId}/${pageId}`, {
+      method: 'POST',
+      body: {
+        active: isActive
+      }
+    })
+    await fetchConnections()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Expose the refresh method to parent component
+defineExpose({
+  refreshConnections
+})
+
+onMounted(() => {
+  fetchConnections()
 })
 </script>
 
@@ -69,5 +140,8 @@ onMounted(async () => {
 
 .connection-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 </style>
