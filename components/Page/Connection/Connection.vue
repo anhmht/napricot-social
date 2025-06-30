@@ -3,20 +3,13 @@
     <div class="connections-header">
       <h1>Connections</h1>
     </div>
-    <FacebookHeader @connection-added="handleConnectionAdded" />
+    <FacebookHeader @connection-added="handleFacebookConnectionAdded" />
     <div class="connections-list">
       <FacebookConnection ref="facebookConnectionRef" />
     </div>
-    <h2>YouTube</h2>
+    <YoutubeHeader @connection-added="handleYoutubeConnectionAdded" />
     <div class="connections-list">
-      <ConnectionItem
-        icon-src="/icons/youtube.svg"
-        icon-alt="YouTube"
-        icon-class="youtube"
-        title="YouTube Connect"
-      >
-        <YouTubeLogin />
-      </ConnectionItem>
+      <YoutubeConnection ref="youtubeConnectionRef" />
     </div>
     <h2>Threads</h2>
     <div class="connections-list">
@@ -35,20 +28,31 @@
 <script setup lang="ts">
 import ConnectionItem from '~/components/Page/Connection/ConnectionItem.vue'
 import FacebookHeader from '~/components/Page/Connection/Facebook/FacebookHeader.vue'
-import YouTubeLogin from '~/components/Page/Connection/YouTubeLogin.vue'
 import ThreadLogin from '~/components/Page/Connection/ThreadLogin.vue'
 import FacebookConnection from '~/components/Page/Connection/Facebook/FacebookConnection.vue'
+import YoutubeHeader from '~/components/Page/Connection/Youtube/YoutubeHeader.vue'
+import YoutubeConnection from '~/components/Page/Connection/Youtube/YoutubeConnection.vue'
 
 // Template ref for FacebookConnection component
 const facebookConnectionRef = ref<InstanceType<
   typeof FacebookConnection
 > | null>(null)
 
+const youtubeConnectionRef = ref<InstanceType<typeof YoutubeConnection> | null>(
+  null
+)
+
 // Handle connection added event from FacebookHeader
-const handleConnectionAdded = () => {
+const handleFacebookConnectionAdded = () => {
   // Trigger refresh in FacebookConnection
   if (facebookConnectionRef.value) {
     facebookConnectionRef.value.refreshConnections()
+  }
+}
+
+const handleYoutubeConnectionAdded = () => {
+  if (youtubeConnectionRef.value) {
+    youtubeConnectionRef.value.refreshConnections()
   }
 }
 </script>

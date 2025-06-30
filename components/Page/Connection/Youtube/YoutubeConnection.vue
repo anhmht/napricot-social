@@ -1,41 +1,30 @@
 <template>
   <ConnectionItem
     v-if="connections.length > 0"
-    icon-src="/icons/facebook.svg"
-    icon-alt="Facebook"
-    icon-class="facebook"
-    title="Facebook Connect"
+    icon-src="/icons/youtube.svg"
+    icon-alt="Youtube"
+    icon-class="youtube"
+    title="Youtube Connect"
     v-for="connection in connections"
-    :key="connection.facebookId"
+    :key="connection.userId"
   >
     <UserInfo
       :image="connection.avatar"
-      :title="connection.facebookUsername"
-      :id="connection.facebookId"
-      :description="connection.facebookEmail"
+      :title="connection.username"
+      :id="connection.userId"
+      :description="connection.email"
     />
-    <UserInfo
-      :image="connection.pageAvatar"
-      :title="connection.pageName"
-      :id="connection.pageId"
-      :description="connection.pageCategory"
-    />
+
     <div class="connection-actions">
       <Switch
         v-model="connection.isActive"
         :disabled="isLoading"
         label="Active"
-        @change="
-          toggleConnection(
-            connection.facebookId,
-            connection.pageId,
-            connection.isActive
-          )
-        "
+        @change="toggleConnection(connection.userId, connection.isActive)"
       />
       <Button
-        @click="deleteConnection(connection.facebookId, connection.pageId)"
         :disabled="isLoading || connection.isActive"
+        @click="deleteConnection(connection.userId)"
       >
         <i class="icon-delete"></i>
       </Button>
@@ -52,13 +41,13 @@ import ConnectionItem from '../ConnectionItem.vue'
 import UserInfo from '../UserInfo/index.vue'
 import Loading from '~/components/Loading.vue'
 
-const connections = ref<FacebookConnection[]>([])
+const connections = ref<YoutubeConnection[]>([])
 const isLoading = ref(false)
 
 const fetchConnections = async () => {
   isLoading.value = true
   try {
-    const { data } = await $api('/api/facebook/connections', {
+    const { data } = await $api('/api/youtube/connections', {
       method: 'GET'
     })
     connections.value = data
@@ -71,10 +60,10 @@ const refreshConnections = () => {
   fetchConnections()
 }
 
-const deleteConnection = async (facebookId: string, pageId: string) => {
+const deleteConnection = async (userId: string) => {
   try {
     isLoading.value = true
-    await $api(`/api/facebook/connections/${facebookId}/${pageId}`, {
+    await $api(`/api/youtube/connections/${userId}`, {
       method: 'DELETE'
     })
     await fetchConnections()
@@ -85,14 +74,10 @@ const deleteConnection = async (facebookId: string, pageId: string) => {
   }
 }
 
-const toggleConnection = async (
-  facebookId: string,
-  pageId: string,
-  isActive: boolean
-) => {
+const toggleConnection = async (userId: string, isActive: boolean) => {
   try {
     isLoading.value = true
-    await $api(`/api/facebook/connections/${facebookId}/${pageId}`, {
+    await $api(`/api/youtube/connections/${userId}`, {
       method: 'PUT',
       body: {
         active: isActive
