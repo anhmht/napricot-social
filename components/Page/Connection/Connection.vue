@@ -11,27 +11,20 @@
     <div class="connections-list">
       <YoutubeConnection ref="youtubeConnectionRef" />
     </div>
-    <h2>Threads</h2>
+    <ThreadHeader @connection-added="handleThreadsConnectionAdded" />
     <div class="connections-list">
-      <ConnectionItem
-        icon-src="/icons/threads.svg"
-        icon-alt="Threads"
-        icon-class="threads"
-        title="Threads Connect"
-      >
-        <ThreadLogin />
-      </ConnectionItem>
+      <ThreadConnection ref="threadsConnectionRef" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import ConnectionItem from '~/components/Page/Connection/ConnectionItem.vue'
 import FacebookHeader from '~/components/Page/Connection/Facebook/FacebookHeader.vue'
-import ThreadLogin from '~/components/Page/Connection/ThreadLogin.vue'
+import ThreadHeader from '~/components/Page/Connection/Thread/ThreadHeader.vue'
 import FacebookConnection from '~/components/Page/Connection/Facebook/FacebookConnection.vue'
 import YoutubeHeader from '~/components/Page/Connection/Youtube/YoutubeHeader.vue'
 import YoutubeConnection from '~/components/Page/Connection/Youtube/YoutubeConnection.vue'
+import ThreadConnection from '~/components/Page/Connection/Thread/ThreadConnection.vue'
 
 // Template ref for FacebookConnection component
 const facebookConnectionRef = ref<InstanceType<
@@ -39,6 +32,10 @@ const facebookConnectionRef = ref<InstanceType<
 > | null>(null)
 
 const youtubeConnectionRef = ref<InstanceType<typeof YoutubeConnection> | null>(
+  null
+)
+
+const threadsConnectionRef = ref<InstanceType<typeof ThreadConnection> | null>(
   null
 )
 
@@ -53,6 +50,12 @@ const handleFacebookConnectionAdded = () => {
 const handleYoutubeConnectionAdded = () => {
   if (youtubeConnectionRef.value) {
     youtubeConnectionRef.value.refreshConnections()
+  }
+}
+
+const handleThreadsConnectionAdded = () => {
+  if (threadsConnectionRef.value) {
+    threadsConnectionRef.value.refreshConnections()
   }
 }
 </script>
