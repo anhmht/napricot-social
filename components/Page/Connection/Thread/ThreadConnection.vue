@@ -7,6 +7,9 @@
     title="Threads Connect"
     v-for="connection in connections"
     :key="connection.threadId"
+    :class="{
+      'connection-expired': isConnectionExpired(connection.expiredDate)
+    }"
   >
     <UserInfo
       :image="connection.avatar"
@@ -15,15 +18,26 @@
       :description="connection.email"
     />
 
+    <div class="connection-info">
+      <span class="connection-info-label">Expired Date:</span>
+      {{ formatDate(connection.expiredDate) }}
+    </div>
+
     <div class="connection-actions">
       <Switch
         v-model="connection.isActive"
-        :disabled="isLoading"
+        :disabled="loading"
         label="Active"
         @change="toggleConnection(connection.threadId, connection.isActive)"
       />
       <Button
-        :disabled="isLoading || connection.isActive"
+        :disabled="loading"
+        @click="emit('refresh-token', connection.threadId)"
+      >
+        <i class="icon-refresh"></i>
+      </Button>
+      <Button
+        :disabled="loading || connection.isActive"
         @click="deleteConnection(connection.threadId)"
       >
         <i class="icon-delete"></i>
@@ -33,7 +47,7 @@
   <div v-else class="no-connections">
     <p>No connections found</p>
   </div>
-  <Loading :loading="isLoading" />
+  <Loading :loading="loading" />
 </template>
 
 <script setup lang="ts">
@@ -41,64 +55,53 @@ import ConnectionItem from '../ConnectionItem.vue'
 import UserInfo from '../UserInfo/index.vue'
 import Loading from '~/components/Loading.vue'
 
-const connections = ref<ThreadsConnection[]>([])
-const isLoading = ref(false)
+defineProps<{
+  loading: boolean
+  connections: ThreadsConnection[]
+}>()
 
-const fetchConnections = async () => {
-  isLoading.value = true
-  try {
-    const { data } = await $api('/api/threads/connections', {
-      method: 'GET'
-    })
-    connections.value = data
-  } finally {
-    isLoading.value = false
-  }
-}
-
-const refreshConnections = () => {
-  fetchConnections()
-}
+const emit = defineEmits<{
+  'update:loading': [value: boolean]
+  refresh: []
+  'refresh-token': [threadId: string]
+}>()
 
 const deleteConnection = async (userId: string) => {
   try {
-    isLoading.value = true
+    emit('update:loading', true)
     await $api(`/api/threads/connections/${userId}`, {
       method: 'DELETE'
     })
-    await fetchConnections()
+    emit('refresh')
   } catch (error) {
     console.error(error)
   } finally {
-    isLoading.value = false
+    emit('update:loading', false)
   }
 }
 
 const toggleConnection = async (userId: string, isActive: boolean) => {
   try {
-    isLoading.value = true
+    emit('update:loading', true)
     await $api(`/api/threads/connections/${userId}`, {
       method: 'PUT',
       body: {
         active: isActive
       }
     })
-    await fetchConnections()
+    emit('refresh')
   } catch (error) {
     console.error(error)
   } finally {
-    isLoading.value = false
+    emit('update:loading', false)
   }
 }
 
-// Expose the refresh method to parent component
-defineExpose({
-  refreshConnections
-})
-
-onMounted(() => {
-  fetchConnections()
-})
+const isConnectionExpired = (expiredDate: string | Date): boolean => {
+  const now = new Date()
+  const expiration = new Date(expiredDate)
+  return now >= expiration
+}
 </script>
 
 <style lang="postcss" scoped>

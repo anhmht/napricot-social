@@ -26,7 +26,7 @@
     <div class="connection-actions">
       <Switch
         v-model="connection.isActive"
-        :disabled="loading || isConnectionExpired(connection.expiredDate)"
+        :disabled="loading"
         label="Active"
         @change="toggleConnection(connection.userId, connection.isActive)"
       />
@@ -125,38 +125,10 @@ const isConnectionExpired = (expiredDate: string | Date): boolean => {
   margin-top: 20px;
 }
 
-.connection-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: normal;
-  font-family: monospace;
-  &-label {
-    color: var(--color-text);
-  }
-}
-
-.connection-info-label {
-  font-weight: 600;
-}
-
 .connection-actions {
   margin-left: auto;
   display: flex;
   align-items: center;
   gap: 16px;
-}
-
-.connection-expired {
-  text-decoration: line-through;
-  opacity: 0.6;
-  color: #9ca3af;
-}
-
-.connection-expired * {
-  text-decoration: line-through;
 }
 </style>

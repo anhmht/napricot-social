@@ -73,13 +73,9 @@ const handleCodeResponse = async (response: any, refresh = false) => {
     tokenClient.value._timeoutId = null
   }
 
-  console.log(response, refresh)
-
   if (response.code) {
     // Exchange authorization code for tokens
     if (refresh) {
-      console.log(1)
-
       await refreshYoutubeConnection(response.code)
     } else {
       await exchangeCodeForTokens(response.code)

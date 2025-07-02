@@ -81,6 +81,34 @@ defineProps<Props>()
   font-weight: normal;
 }
 
+.connection-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: normal;
+  font-family: monospace;
+  &-label {
+    color: var(--color-text);
+  }
+}
+
+.connection-info-label {
+  font-weight: 600;
+}
+
+.connection-expired {
+  text-decoration: line-through;
+  opacity: 0.6;
+  color: #9ca3af;
+}
+
+.connection-expired * {
+  text-decoration: line-through;
+}
+
 @media (max-width: 768px) {
   .connection-item {
     flex-direction: column;
