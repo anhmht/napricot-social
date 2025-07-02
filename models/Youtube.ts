@@ -15,6 +15,7 @@ export interface YoutubeConnection {
   accessToken: string
   refreshToken: string
   isActive: boolean
+  expiredDate: string
   createdAt: Date
   updatedAt: Date
 }

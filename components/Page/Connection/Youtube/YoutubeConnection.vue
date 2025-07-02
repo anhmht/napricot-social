@@ -7,6 +7,9 @@
     title="Youtube Connect"
     v-for="connection in connections"
     :key="connection.userId"
+    :class="{
+      'connection-expired': isConnectionExpired(connection.expiredDate)
+    }"
   >
     <UserInfo
       :image="connection.avatar"
@@ -15,15 +18,26 @@
       :description="connection.email"
     />
 
+    <div class="connection-info">
+      <span class="connection-info-label">Expired Date:</span>
+      {{ formatDate(connection.expiredDate) }}
+    </div>
+
     <div class="connection-actions">
       <Switch
         v-model="connection.isActive"
-        :disabled="isLoading"
+        :disabled="loading || isConnectionExpired(connection.expiredDate)"
         label="Active"
         @change="toggleConnection(connection.userId, connection.isActive)"
       />
       <Button
-        :disabled="isLoading || connection.isActive"
+        :disabled="loading"
+        @click="emit('refresh-token', connection.userId)"
+      >
+        <i class="icon-refresh"></i>
+      </Button>
+      <Button
+        :disabled="loading || connection.isActive"
         @click="deleteConnection(connection.userId)"
       >
         <i class="icon-delete"></i>
@@ -33,7 +47,7 @@
   <div v-else class="no-connections">
     <p>No connections found</p>
   </div>
-  <Loading :loading="isLoading" />
+  <Loading :loading="loading" />
 </template>
 
 <script setup lang="ts">
@@ -41,64 +55,53 @@ import ConnectionItem from '../ConnectionItem.vue'
 import UserInfo from '../UserInfo/index.vue'
 import Loading from '~/components/Loading.vue'
 
-const connections = ref<YoutubeConnection[]>([])
-const isLoading = ref(false)
+const emit = defineEmits<{
+  (e: 'refresh'): void
+  (e: 'refresh-token', userId: string): void
+  (e: 'update:loading', loading: boolean): void
+}>()
 
-const fetchConnections = async () => {
-  isLoading.value = true
-  try {
-    const { data } = await $api('/api/youtube/connections', {
-      method: 'GET'
-    })
-    connections.value = data
-  } finally {
-    isLoading.value = false
-  }
-}
-
-const refreshConnections = () => {
-  fetchConnections()
-}
+defineProps<{
+  connections: YoutubeConnection[]
+  loading: boolean
+}>()
 
 const deleteConnection = async (userId: string) => {
   try {
-    isLoading.value = true
+    emit('update:loading', true)
     await $api(`/api/youtube/connections/${userId}`, {
       method: 'DELETE'
     })
-    await fetchConnections()
+    emit('refresh')
   } catch (error) {
     console.error(error)
   } finally {
-    isLoading.value = false
+    emit('update:loading', false)
   }
 }
 
 const toggleConnection = async (userId: string, isActive: boolean) => {
   try {
-    isLoading.value = true
+    emit('update:loading', true)
     await $api(`/api/youtube/connections/${userId}`, {
       method: 'PUT',
       body: {
         active: isActive
       }
     })
-    await fetchConnections()
+    emit('refresh')
   } catch (error) {
     console.error(error)
   } finally {
-    isLoading.value = false
+    emit('update:loading', false)
   }
 }
 
-// Expose the refresh method to parent component
-defineExpose({
-  refreshConnections
-})
-
-onMounted(() => {
-  fetchConnections()
-})
+const isConnectionExpired = (expiredDate: string | Date): boolean => {
+  const now = new Date()
+  const expiration = new Date(expiredDate)
+  return now >= expiration
+}
 </script>
 
 <style lang="postcss" scoped>
@@ -122,10 +125,38 @@ onMounted(() => {
   margin-top: 20px;
 }
 
+.connection-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: normal;
+  font-family: monospace;
+  &-label {
+    color: var(--color-text);
+  }
+}
+
+.connection-info-label {
+  font-weight: 600;
+}
+
 .connection-actions {
   margin-left: auto;
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.connection-expired {
+  text-decoration: line-through;
+  opacity: 0.6;
+  color: #9ca3af;
+}
+
+.connection-expired * {
+  text-decoration: line-through;
 }
 </style>

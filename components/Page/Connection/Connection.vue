@@ -3,61 +3,16 @@
     <div class="connections-header">
       <h1>Connections</h1>
     </div>
-    <FacebookHeader @connection-added="handleFacebookConnectionAdded" />
-    <div class="connections-list">
-      <FacebookConnection ref="facebookConnectionRef" />
-    </div>
-    <YoutubeHeader @connection-added="handleYoutubeConnectionAdded" />
-    <div class="connections-list">
-      <YoutubeConnection ref="youtubeConnectionRef" />
-    </div>
-    <ThreadHeader @connection-added="handleThreadsConnectionAdded" />
-    <div class="connections-list">
-      <ThreadConnection ref="threadsConnectionRef" />
-    </div>
+    <Facebook />
+    <Youtube />
+    <Thread />
   </div>
 </template>
 
 <script setup lang="ts">
-import FacebookHeader from '~/components/Page/Connection/Facebook/FacebookHeader.vue'
-import ThreadHeader from '~/components/Page/Connection/Thread/ThreadHeader.vue'
-import FacebookConnection from '~/components/Page/Connection/Facebook/FacebookConnection.vue'
-import YoutubeHeader from '~/components/Page/Connection/Youtube/YoutubeHeader.vue'
-import YoutubeConnection from '~/components/Page/Connection/Youtube/YoutubeConnection.vue'
-import ThreadConnection from '~/components/Page/Connection/Thread/ThreadConnection.vue'
-
-// Template ref for FacebookConnection component
-const facebookConnectionRef = ref<InstanceType<
-  typeof FacebookConnection
-> | null>(null)
-
-const youtubeConnectionRef = ref<InstanceType<typeof YoutubeConnection> | null>(
-  null
-)
-
-const threadsConnectionRef = ref<InstanceType<typeof ThreadConnection> | null>(
-  null
-)
-
-// Handle connection added event from FacebookHeader
-const handleFacebookConnectionAdded = () => {
-  // Trigger refresh in FacebookConnection
-  if (facebookConnectionRef.value) {
-    facebookConnectionRef.value.refreshConnections()
-  }
-}
-
-const handleYoutubeConnectionAdded = () => {
-  if (youtubeConnectionRef.value) {
-    youtubeConnectionRef.value.refreshConnections()
-  }
-}
-
-const handleThreadsConnectionAdded = () => {
-  if (threadsConnectionRef.value) {
-    threadsConnectionRef.value.refreshConnections()
-  }
-}
+import Facebook from './Facebook/Facebook.vue'
+import Youtube from './Youtube/Youtube.vue'
+import Thread from './Thread/Thread.vue'
 </script>
 
 <style lang="postcss">

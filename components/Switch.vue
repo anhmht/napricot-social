@@ -144,7 +144,6 @@ const handleChange = (event: Event) => {
 }
 
 .switch-input:disabled + .switch-toggle .switch-slider {
-  background: var(--color-grayscale-50);
   box-shadow: none;
 }
 
