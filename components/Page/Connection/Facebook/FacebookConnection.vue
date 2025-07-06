@@ -106,13 +106,31 @@ const toggleConnection = async (
   }
 }
 
+const getPageImage = async (pageId: string) => {
+  isLoading.value = true
+  try {
+    const response = await fetch(
+      `https://graph.facebook.com/v23.0/${pageId}/picture?redirect=false`
+    )
+    const data = await response.json()
+    return data.data.url
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
 // Expose the refresh method to parent component
 defineExpose({
   refreshConnections
 })
 
-onMounted(() => {
-  fetchConnections()
+onMounted(async () => {
+  await fetchConnections()
+  for (const connection of connections.value) {
+    connection.pageAvatar = await getPageImage(connection.pageId)
+  }
 })
 </script>
 

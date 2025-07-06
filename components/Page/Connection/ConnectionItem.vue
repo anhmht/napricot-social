@@ -65,6 +65,10 @@ defineProps<Props>()
   background-color: #000000;
 }
 
+.connection-icon.x-connection {
+  background-color: #000000;
+}
+
 .connection-icon img {
   filter: brightness(0) invert(1);
 }
