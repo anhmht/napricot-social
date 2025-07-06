@@ -1,6 +1,6 @@
 export const useAuth = () => {
   // Get the user state
-  const user = useState('auth.user', () => undefined)
+  const user = useState<User | undefined>('auth.user', () => undefined)
 
   // Computed property to check if user is logged in
   const isLoggedIn = computed(() => !!user.value)
@@ -19,8 +19,8 @@ export const useAuth = () => {
   const getMe = async () => {
     try {
       const response = await $api('/api/auth/me')
-      user.value = response
-      return response
+      user.value = response.user as User
+      return response.user as User
     } catch (error) {
       console.log('Failed to refresh user data:', error)
       user.value = undefined

@@ -35,8 +35,10 @@
 
     <!-- User Navigation at Bottom -->
     <div class="user-nav" v-if="user">
+      <div class="nav-section"></div>
       <div class="nav-section">
         <SidebarGroup icon="user" text="User">
+          <SidebarSubItem :text="`ID: ${user.userId}`" />
           <SidebarSubItem @click="signOut" text="Sign Out" />
         </SidebarGroup>
       </div>
@@ -140,6 +142,13 @@ const signOut = async () => {
 
 .nav-section {
   padding: 0 1rem;
+}
+
+.user-id {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 /* Mobile Toggle Button */
