@@ -15,9 +15,7 @@
           placeholder="Enter your email"
           required
           :disabled="isLoading"
-          :error-message="validationErrors.email"
-          @blur="validateEmailField"
-          @input="validationErrors.email && validateEmailField()"
+          :validator="validateEmail"
         />
 
         <InputField
@@ -28,9 +26,7 @@
           placeholder="Enter your password"
           required
           :disabled="isLoading"
-          :error-message="validationErrors.password"
-          @blur="validatePasswordField"
-          @input="validationErrors.password && validatePasswordField()"
+          :validator="validatePassword"
         />
 
         <div class="form-options">
@@ -80,12 +76,6 @@ const loginForm = reactive({
 const isLoading = ref(false)
 const errorMessage = ref('')
 
-// Validation errors
-const validationErrors = reactive({
-  email: '',
-  password: ''
-})
-
 // Validation functions
 const validateEmail = (email) => {
   if (!email) {
@@ -106,19 +96,10 @@ const validatePassword = (password) => {
 }
 
 const validateForm = () => {
-  validationErrors.email = validateEmail(loginForm.email)
-  validationErrors.password = validatePassword(loginForm.password)
+  const emailError = validateEmail(loginForm.email)
+  const passwordError = validatePassword(loginForm.password)
 
-  return !validationErrors.email && !validationErrors.password
-}
-
-// Real-time validation
-const validateEmailField = () => {
-  validationErrors.email = validateEmail(loginForm.email)
-}
-
-const validatePasswordField = () => {
-  validationErrors.password = validatePassword(loginForm.password)
+  return !emailError && !passwordError
 }
 
 // Handle login submission

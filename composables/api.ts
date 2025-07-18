@@ -12,9 +12,6 @@ export function $api<T>(
       ...opts?.headers
     },
     credentials: 'include',
-    // Add retry logic for CORS issues
-    retry: 1,
-    retryDelay: 500,
     onResponseError({ request, response, options }) {
       // Handle CORS errors specifically
       if (response.status === 0 || response.status === 401) {

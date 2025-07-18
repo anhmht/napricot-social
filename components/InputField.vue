@@ -12,8 +12,8 @@
       @input="handleInput"
       @blur="handleBlur"
     />
-    <div v-if="errorMessage" class="field-error">
-      {{ errorMessage }}
+    <div v-if="internalErrorMessage" class="field-error">
+      {{ internalErrorMessage }}
     </div>
   </div>
 </template>
@@ -28,6 +28,7 @@ interface Props {
   disabled?: boolean
   errorMessage?: string
   id?: string
+  validator?: (value: string) => string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -36,7 +37,8 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   disabled: false,
   errorMessage: '',
-  id: ''
+  id: '',
+  validator: undefined
 })
 
 const emit = defineEmits<{
@@ -45,24 +47,52 @@ const emit = defineEmits<{
   input: [event: Event]
 }>()
 
+// Internal validation error state
+const internalErrorMessage = ref('')
+
 // Generate unique ID if not provided
 const inputId = computed(() => {
   return props.id || `input-${Math.random().toString(36).substr(2, 9)}`
 })
 
 const hasError = computed(() => {
-  return !!props.errorMessage
+  return !!internalErrorMessage.value || !!props.errorMessage
 })
+
+// Validation function
+const validateField = () => {
+  if (props.validator) {
+    internalErrorMessage.value = props.validator(props.modelValue)
+  }
+}
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', target.value)
   emit('input', event)
+
+  // Real-time validation on input if there's already an error
+  if (internalErrorMessage.value && props.validator) {
+    validateField()
+  }
 }
 
 const handleBlur = (event: FocusEvent) => {
   emit('blur', event)
+
+  // Validate on blur
+  validateField()
 }
+
+// Watch for external error message changes
+watch(
+  () => props.errorMessage,
+  (newError) => {
+    if (newError) {
+      internalErrorMessage.value = newError
+    }
+  }
+)
 </script>
 
 <style scoped>
