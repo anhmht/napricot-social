@@ -1,4 +1,3 @@
 {
-  "buildCommand": "yarn build",
-  "framework": "nuxt"
+  "buildCommand": "yarn build"
 }
