@@ -58,6 +58,11 @@ const handleAuthorizationCode = async (
     console.error('Error exchanging code for tokens:', error)
   } finally {
     isLoading.value = false
+
+    // Clean up URL
+    window.history.replaceState({}, document.title, window.location.pathname)
+
+    sessionStorage.removeItem('x_oauth')
   }
 }
 
@@ -83,10 +88,5 @@ onMounted(async () => {
   if (oauthToken && oauthVerifier) {
     await handleAuthorizationCode(oauthToken, oauthVerifier)
   }
-
-  // Clean up URL
-  window.history.replaceState({}, document.title, window.location.pathname)
-
-  sessionStorage.removeItem('x_oauth')
 })
 </script>
