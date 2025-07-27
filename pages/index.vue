@@ -1,5 +1,7 @@
 <template>
-  <Connection />
+  <ClientOnly>
+    <Connection />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">

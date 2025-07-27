@@ -28,6 +28,24 @@ export const useAuth = () => {
     }
   }
 
+  // Method to check auth status with loading state for layouts
+  const checkAuthStatus = async () => {
+    // If user is already loaded, return immediately
+    if (user.value !== undefined) {
+      return user.value
+    }
+
+    // Try to get user info
+    try {
+      await getMe()
+      return user.value
+    } catch (error) {
+      // User is not authenticated
+      console.log(error)
+      return undefined
+    }
+  }
+
   const signOut = async () => {
     await $api('/api/auth/logout', {
       method: 'POST'
@@ -44,7 +62,7 @@ export const useAuth = () => {
       method: 'POST',
       body: { email, password, rememberMe }
     })
-    setUser(response)
+    setUser(response.user)
   }
 
   return {
@@ -53,6 +71,7 @@ export const useAuth = () => {
     setUser,
     clearUser,
     getMe,
+    checkAuthStatus,
     signOut,
     signIn
   }

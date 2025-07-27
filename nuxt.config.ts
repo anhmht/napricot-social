@@ -51,14 +51,6 @@ export default defineNuxtConfig({
       ...getRunTimeConfig()
     }
   },
-  routeRules: {
-    '/': {
-      ssr: false
-    },
-    '/login': {
-      ssr: false
-    }
-  },
 
   app: {
     head: {
