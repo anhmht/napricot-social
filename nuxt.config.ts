@@ -12,9 +12,7 @@ export default defineNuxtConfig({
       options: {
         target: 'node18'
       }
-    },
-    // Better production configuration
-    preset: process.env.NODE_ENV === 'production' ? 'node-server' : undefined
+    }
   },
 
   // Better build configuration for SPA
