@@ -69,6 +69,10 @@ defineProps<Props>()
   background-color: #000000;
 }
 
+.connection-icon.pinterest {
+  background-color: #e60023;
+}
+
 .connection-icon img {
   filter: brightness(0) invert(1);
 }

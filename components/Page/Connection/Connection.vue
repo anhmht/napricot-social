@@ -7,6 +7,7 @@
     <Youtube />
     <Thread />
     <X />
+    <Pinterest />
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import Facebook from './Facebook/Facebook.vue'
 import Youtube from './Youtube/Youtube.vue'
 import Thread from './Thread/Thread.vue'
 import X from './X/X.vue'
+import Pinterest from './Pinterest/Pinterest.vue'
 </script>
 
 <style lang="postcss">
