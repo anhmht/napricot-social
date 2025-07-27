@@ -12,6 +12,27 @@ export default defineNuxtConfig({
       options: {
         target: 'node18'
       }
+    },
+    // Better production configuration
+    preset: process.env.NODE_ENV === 'production' ? 'node-server' : undefined
+  },
+
+  // Better build configuration for SPA
+  experimental: {
+    payloadExtraction: false
+  },
+
+  // Optimize chunk splitting
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'vue-router'],
+            moment: ['moment']
+          }
+        }
+      }
     }
   },
 
@@ -55,7 +76,9 @@ export default defineNuxtConfig({
         }
       ]
     },
-    buildAssetsDir: '/_nuxt/'
+    buildAssetsDir: '/_nuxt/',
+    // Ensure proper base URL for production
+    baseURL: process.env.NODE_ENV === 'production' ? '/' : undefined
   },
 
   components: true,
