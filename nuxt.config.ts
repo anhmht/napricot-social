@@ -6,7 +6,7 @@ import { getRunTimeConfig } from './config/RuntimeConfig'
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  ssr: false,
+
   nitro: {
     esbuild: {
       options: {
@@ -49,6 +49,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       ...getRunTimeConfig()
+    }
+  },
+  routeRules: {
+    '/': {
+      ssr: false
+    },
+    '/login': {
+      ssr: false
     }
   },
 

@@ -47,6 +47,19 @@ const fetchConnections = async () => {
       method: 'GET'
     })
     connections.value = data
+
+    for (const connection of connections.value) {
+      const response = await fetch(
+        `https://graph.threads.net/v1.0/${connection.threadId}?access_token=${connection.accessToken}&fields=threads_profile_picture_url`,
+        {
+          method: 'GET'
+        }
+      )
+      const info = await response.json()
+      connection.avatar = info.threads_profile_picture_url
+    }
+  } catch (error) {
+    console.error('Error fetching threads connections:', error)
   } finally {
     isLoading.value = false
   }
