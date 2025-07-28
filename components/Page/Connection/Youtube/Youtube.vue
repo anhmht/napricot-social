@@ -40,7 +40,7 @@ const initializeGoogleSDK = (refresh = false) => {
       tokenClient.value = window.google.accounts.oauth2.initCodeClient({
         client_id: clientId.value,
         scope:
-          'profile email https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload',
+          'profile email https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.upload',
         ux_mode: 'popup',
         redirect_uri: window.location.origin,
         callback: (response: any) => handleCodeResponse(response, refresh),
