@@ -3,11 +3,11 @@
     <div class="connections-header">
       <h1>Connections</h1>
     </div>
-    <Facebook />
+    <Pinterest />
     <Youtube />
     <Thread />
     <X />
-    <Pinterest />
+    <Facebook />
   </div>
 </template>
 
